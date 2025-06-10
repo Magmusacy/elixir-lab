@@ -1,0 +1,53 @@
+# Ignorowanie katalogu .idea (konfiguracja projektu IntelliJ)
+.idea/
+
+# Ignorowanie plików konfiguracyjnych specyficznych dla IDE
+*.iml
+*.iws
+
+# Ignorowanie plików logów
+*.log
+
+# Ignorowanie plików generowanych przez system operacyjny
+.DS_Store
+Thumbs.db
+
+# Ignorowanie plików kompilacji i artefaktów
+out/
+build/
+
+# Ignorowanie plików tymczasowych
+*.class
+*.jar
+*.war
+*.ear
+
+# Ignorowanie plików specyficznych dla systemu kontroli wersji
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# The directory Mix will write compiled artifacts to.
+/_build/
+
+# If you run "mix test --cover", coverage assets end up here.
+/cover/
+
+# The directory Mix downloads your dependencies sources to.
+/deps/
+
+# Where third-party dependencies like ExDoc output generated docs.
+/doc/
+
+# If the VM crashes, it generates a dump, let's ignore it too.
+erl_crash.dump
+
+# Also ignore archive artifacts (built via "mix archive.build").
+*.ez
+
+# Ignore package tarball (built via "mix hex.build").
+pollutiondb-*.tar
+
+# Temporary files, for example, from tests.
+/tmp/
