@@ -6,7 +6,7 @@ defmodule PollutiondbWeb.ReadingLive do
 
   def mount(_params, _session, socket) do
     date = parse_date("2024-2-14")
-    socket = assign(socket, readings: ten_latest(), date: "")
+    socket = assign(socket, readings: ten_latest(), type: "", value: "", date: "", station_id: "", stations: Pollutiondb.Station.get_all())
     {:ok, socket}
   end
 
@@ -29,6 +29,13 @@ defmodule PollutiondbWeb.ReadingLive do
     case Integer.parse(string_num) do
       {num, _} -> num
       :error -> default
+    end
+  end
+
+  defp to_float(string_num, default) do
+    case Float.parse(string_num) do
+      :error -> default
+      {float, _} -> float
     end
   end
 
@@ -56,10 +63,33 @@ defmodule PollutiondbWeb.ReadingLive do
     {:noreply, socket}
   end
 
+  def handle_event("add-reading", %{"station_id" => station_id, "type" => type, "value" => value}, socket) do
+     Pollutiondb.Reading.add_now(to_int(station_id, 1), type, to_float(value, 0.0))
+    date = socket.assigns.date
+     readings = case date do
+      "" -> ten_latest()
+      _ -> ten_latest_by_date(date)
+    end
+   socket = assign(socket, readings: readings, type: type, value: value, station_id: station_id)
+    {:noreply, socket}
+  end
+
   def render(assigns) do
     ~H"""
       <form phx-change="date-change">
         <input type="date" name="date" value={@date} />
+      </form>
+
+      <form phx-submit="add-reading">
+        <select name="station_id">
+          <%= for station <- @stations do %>
+            <option label={station.name} value={station.id} selected={station.id == @station_id}/>
+          <% end %>
+        </select>
+
+        Type: <input type="text" name="type" value={@type} /><br/>
+        Value: <input type="text" name="value" value={@value} /><br/>
+        <input type="submit" />
       </form>
 
       <table>
